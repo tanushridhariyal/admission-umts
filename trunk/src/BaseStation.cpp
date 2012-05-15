@@ -85,6 +85,11 @@ const float& BaseStation::getThresholdPower(void) const
 	return _thresholdPower;
 }
 
+const float& watt_to_db(float watt_value) 
+{
+	return 10*log10(watt_value);
+
+}
 //Mutators
 void BaseStation::setThresholdPower(float thresholdPower)
 {

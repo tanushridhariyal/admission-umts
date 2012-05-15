@@ -1,7 +1,9 @@
 #pragma once
 
 #include <set>
+#include <math.h>
 #include "User.h"
+
 
 class BaseStation
 {
@@ -25,7 +27,7 @@ public:
 	const float& getFrequency(void) const;
 	const float& getTotalTransmittedPower(void) const;
 	const float& getThresholdPower(void) const;
-
+	const float& watt_to_db(float) ;
 	//Mutators
 	void setThresholdPower(float thresholdPower);
 
