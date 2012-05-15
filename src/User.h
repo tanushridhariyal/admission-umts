@@ -16,6 +16,7 @@ public:
 	const float& getMobileHeight(void) const;
 	const float& getPathLoss(void) const;
 	const float& getDevotedPower(void) const;
+	const float& getDistance(void) const;
 
 	//Mutators
 	void setBaseStation(BaseStation baseStation);
@@ -27,6 +28,7 @@ private:
 	float _mobileHeight;
 	float _pathLoss;
 	float _devotedPower;
+	float _distance;
 	
 };
 
