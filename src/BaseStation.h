@@ -10,6 +10,7 @@ class BaseStation
 public:
 	BaseStation(void);
 	~BaseStation(void);
+	BaseStation(float pilotPower,float bandwidth,float snrTarget,float bitRate,float noisePower,float orthoFactor ,float baseStationHeight,float gain,float frequency,float totalTransmittedPower,float thresholdPower);
 	float computeIncreaseEstimation (User user);
 	bool isAdmissible(User user);
 

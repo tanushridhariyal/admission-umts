@@ -10,6 +10,23 @@ BaseStation::~BaseStation(void)
 {
 }
 
+BaseStation(float pilotPower,float bandwidth,float snrTarget,float bitRate,float noisePower,float orthoFactor ,float baseStationHeight,float gain,float frequency,float totalTransmittedPower,float thresholdPower)
+{
+	_pilotPower=pilotPower;
+	_bandwidth=bandwidth;
+	_snrTarget=snrTarget;
+	_bitRate=bitRate;
+	_noisePower=noisePower;
+	_orthoFactor=orthoFactor;
+	_baseStationHeight=baseStationHeigth;
+	_gain=gain;
+	_frequency=frequency;
+	_totalTransmittedPower=totalTransmittedPower;
+	_thresholdPower=thresholdPower;
+
+
+
+}
 float BaseStation::computeIncreaseEstimation (User user)
 {
 	//TODO
