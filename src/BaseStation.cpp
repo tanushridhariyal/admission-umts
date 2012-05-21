@@ -1,4 +1,7 @@
+#include <math.h>
+
 #include "BaseStation.h"
+#include "User.h"
 
 
 BaseStation::BaseStation(void)
@@ -10,41 +13,43 @@ BaseStation::~BaseStation(void)
 {
 }
 
-BaseStation(float pilotPower,float bandwidth,float snrTarget,float bitRate,float noisePower,float orthoFactor ,float baseStationHeight,float gain,float frequency,float totalTransmittedPower,float thresholdPower)
+BaseStation::BaseStation(float pilotPower, float bandwidth, float snrTarget, float bitRate, float noisePower, float orthoFactor ,
+	float baseStationHeight, float gain, float frequency, float totalTransmittedPower, float thresholdPower)
 {
-	_pilotPower=pilotPower;
-	_bandwidth=bandwidth;
-	_snrTarget=snrTarget;
-	_bitRate=bitRate;
-	_noisePower=noisePower;
-	_orthoFactor=orthoFactor;
-	_baseStationHeight=baseStationHeigth;
-	_gain=gain;
-	_frequency=frequency;
-	_totalTransmittedPower=totalTransmittedPower;
-	_thresholdPower=thresholdPower;
-
-
-
+	_pilotPower = pilotPower;
+	_bandwidth = bandwidth;
+	_snrTarget = snrTarget;
+	_bitRate = bitRate;
+	_noisePower = noisePower;
+	_orthoFactor = orthoFactor;
+	_baseStationHeight = baseStationHeight;
+	_gain = gain;
+	_frequency = frequency;
+	_totalTransmittedPower = totalTransmittedPower;
+	_thresholdPower = thresholdPower;
 }
+
 float BaseStation::computeIncreaseEstimation (User user)
 {
 	//TODO
+	return 2;
 }
+
 bool BaseStation::isAdmissible(User user)
 {
 	//TODO
+	return true;
 }
 
 //Accessors
-const std::set<User>& BaseStation::getUsersList(void) const
+const std::vector<User>& BaseStation::getUsersList(void) const
 {
 	return _usersList;
 }
 
-const User& BaseStation::getUserAt(int id) const
+const User& BaseStation::getUserAt(int index) const
 {
-	//TODO	
+	return _usersList[index];
 }
 
 const float& BaseStation::getPilotPower(void) const
@@ -102,7 +107,7 @@ const float& BaseStation::getThresholdPower(void) const
 	return _thresholdPower;
 }
 
-const float& watt_to_db(float watt_value) 
+float watt_to_db(float watt_value) 
 {
 	return 10*log10(watt_value);
 

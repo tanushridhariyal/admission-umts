@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BaseStation.h"
+class BaseStation; //forward declaration to break-up circular dependencies
 
 class User
 {
@@ -11,7 +11,7 @@ public:
 	void computeDevotedPower(void);
 
 	//Accessors
-	const BaseStation& getBaseStation(void) const;
+	BaseStation* getBaseStation(void) const;
 	const int& getId(void) const;
 	const float& getMobileHeight(void) const;
 	const float& getPathLoss(void) const;
@@ -19,16 +19,15 @@ public:
 	const float& getDistance(void) const;
 
 	//Mutators
-	void setBaseStation(BaseStation baseStation);
+	/*void setBaseStation(BaseStation baseStation);*/
 
 private:
-	BaseStation _baseStation;
+	BaseStation* _baseStation;
 
 	int _id;
 	float _mobileHeight;
 	float _pathLoss;
 	float _devotedPower;
 	float _distance;
-	
 };
 

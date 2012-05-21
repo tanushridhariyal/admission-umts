@@ -1,22 +1,21 @@
 #pragma once
+#include <vector>
 
-#include <set>
-#include <math.h>
-#include "User.h"
-
+class User; //forward declaration to break-up circular dependencies
 
 class BaseStation
 {
 public:
 	BaseStation(void);
 	~BaseStation(void);
-	BaseStation(float pilotPower,float bandwidth,float snrTarget,float bitRate,float noisePower,float orthoFactor ,float baseStationHeight,float gain,float frequency,float totalTransmittedPower,float thresholdPower);
+	BaseStation(float pilotPower, float bandwidth, float snrTarget, float bitRate, float noisePower, float orthoFactor , 
+		float baseStationHeight, float gain, float frequency, float totalTransmittedPower, float thresholdPower);
 	float computeIncreaseEstimation (User user);
 	bool isAdmissible(User user);
 
 	//Accessors
-	const std::set<User>& getUsersList(void) const;
-	const User& getUserAt(int id) const;
+	const std::vector<User>& getUsersList(void) const;
+	const User& getUserAt(int index) const;
 	const float& getPilotPower(void) const;
 	const float& getBandwidth(void) const;
 	const float& getSnrTarget(void) const;
@@ -28,12 +27,12 @@ public:
 	const float& getFrequency(void) const;
 	const float& getTotalTransmittedPower(void) const;
 	const float& getThresholdPower(void) const;
-	const float& watt_to_db(float) ;
+	float watt_to_db(float);
 	//Mutators
 	void setThresholdPower(float thresholdPower);
 
 private:
-	std::set<User> _usersList;
+	std::vector<User> _usersList;
 
 	float _pilotPower;
 	float _bandwidth;
