@@ -30,6 +30,7 @@ public:
 	float watt_to_db(float);
 	//Mutators
 	void setThresholdPower(float thresholdPower);
+	void addUser(User) ;
 
 private:
 	std::vector<User> _usersList;

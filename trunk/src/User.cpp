@@ -12,6 +12,16 @@ User::~User(void)
 	delete _baseStation;
 }
 
+User::User(int id,BaseStation* base)
+{
+	_id=id;
+	_baseStation=base;
+	_mobileHeight=1.5;
+	_distance=rand()%1001;
+
+	computePathLoss();
+
+}
 //Accessors
 BaseStation* User::getBaseStation(void) const
 {
