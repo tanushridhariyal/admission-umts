@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdlib>
 
 class BaseStation; //forward declaration to break-up circular dependencies
 
@@ -7,6 +8,7 @@ class User
 public:
 	User(void);
 	~User(void);
+	User(int,BaseStation*);
 	void computePathLoss(void);
 	void computeDevotedPower(void);
 

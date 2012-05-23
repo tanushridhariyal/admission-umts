@@ -117,3 +117,7 @@ void BaseStation::setThresholdPower(float thresholdPower)
 {
 	_thresholdPower = thresholdPower;
 }
+
+void BaseStation::addUser(User user1) {
+	_usersList.push_back(user1);
+}
