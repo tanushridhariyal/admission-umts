@@ -25,16 +25,18 @@ public:
 	const float& getBaseStationHeight(void) const;
 	const float& getGain(void) const;
 	const float& getFrequency(void) const;
-	const float& getTotalTransmittedPower(void) const;
+	//const float& getTotalTransmittedPower(void) const;
 	const float& getThresholdPower(void) const;
 	float watt_to_db(float);
+	float db_to_watt(float);
 	//Mutators
 	void setThresholdPower(float thresholdPower);
-	void addUser(User) ;
+	void addUser(User*) ;
+	void computeTotalTransmitted();
 
 private:
-	std::vector<User> _usersList;
-
+	std::vector<User*> _usersList;
+	std::vector<float> _totalTransmitted;
 	float _pilotPower;
 	float _bandwidth;
 	float _snrTarget;
