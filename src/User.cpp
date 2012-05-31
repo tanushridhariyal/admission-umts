@@ -17,6 +17,7 @@ User::User(int id,BaseStation* base)
 	_id=id;
 	_baseStation=base;
 	_mobileHeight=1.5;
+//	_devotedPower=0;
 	_distance=rand()%1001;
 
 	computePathLoss();
@@ -43,11 +44,11 @@ const float& User::getPathLoss(void) const
 	return _pathLoss;
 }
 
-const float& User::getDevotedPower(void) const
+/*const float& User::getDevotedPower(void) const
 {
 	return _devotedPower;
 }
-
+*/
 const float& User::getDistance(void) const
 {
 	return _distance;
@@ -72,9 +73,9 @@ void User::computePathLoss(void)
 	_pathLoss= F + B*log10(_distance)-E + _baseStation->getGain();
 }
 
-void User::computeDevotedPower(void)
+/*void User::computeDevotedPower(void)
 {
-}
+}*/
 
 
 

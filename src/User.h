@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdlib>
+#include <vector>
 
 class BaseStation; //forward declaration to break-up circular dependencies
 
@@ -10,14 +11,14 @@ public:
 	~User(void);
 	User(int,BaseStation*);
 	void computePathLoss(void);
-	void computeDevotedPower(void);
+	//void computeDevotedPower(void);
 
 	//Accessors
 	BaseStation* getBaseStation(void) const;
 	const int& getId(void) const;
 	const float& getMobileHeight(void) const;
 	const float& getPathLoss(void) const;
-	const float& getDevotedPower(void) const;
+	//const float& getDevotedPower(void) const;
 	const float& getDistance(void) const;
 
 	//Mutators
@@ -29,7 +30,7 @@ private:
 	int _id;
 	float _mobileHeight;
 	float _pathLoss;
-	float _devotedPower;
+	std::vector<float> _devotedPower;
 	float _distance;
 };
 

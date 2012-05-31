@@ -25,8 +25,9 @@ BaseStation::BaseStation(float pilotPower, float bandwidth, float snrTarget, flo
 	_baseStationHeight = baseStationHeight;
 	_gain = gain;
 	_frequency = frequency;
-	_totalTransmittedPower = totalTransmittedPower;
+	//_totalTransmittedPower = totalTransmittedPower;
 	_thresholdPower = thresholdPower;
+
 }
 
 float BaseStation::computeIncreaseEstimation (User user)
@@ -42,7 +43,7 @@ bool BaseStation::isAdmissible(User user)
 }
 
 //Accessors
-const std::vector<User>& BaseStation::getUsersList(void) const
+/*const std::vector<User>& BaseStation::getUsersList(void) const
 {
 	return _usersList;
 }
@@ -51,7 +52,7 @@ const User& BaseStation::getUserAt(int index) const
 {
 	return _usersList[index];
 }
-
+*/
 const float& BaseStation::getPilotPower(void) const
 {
 	return _pilotPower;
@@ -97,11 +98,11 @@ const float& BaseStation::getFrequency(void) const
 	return _frequency;
 }
 
-const float& BaseStation::getTotalTransmittedPower(void) const
+/*const float& BaseStation::getTotalTransmittedPower(void) const
 {
 	return _totalTransmittedPower;
 }
-
+*/
 const float& BaseStation::getThresholdPower(void) const
 {
 	return _thresholdPower;
@@ -112,12 +113,37 @@ float watt_to_db(float watt_value)
 	return 10*log10(watt_value);
 
 }
+float db_to_watt(float db_value)
+{
+	return pow(10,(db_value/10));
+}
+
 //Mutators
 void BaseStation::setThresholdPower(float thresholdPower)
 {
 	_thresholdPower = thresholdPower;
 }
 
-void BaseStation::addUser(User user1) {
+void BaseStation::addUser(User* user1) {
 	_usersList.push_back(user1);
+}
+
+void BaseStation::computeTotalTransmitted()
+{
+	float divisor,totalPower;
+	divisor = getBandwidth()/(getSnrTarget()*getBitRate())+getOrthoFactor(); // store the constant divisor factor of the formula
+	for(int i=0;i<_usersList.size();i++)
+	{
+		totalPower=totalPower+db_to_watt(_usersList[i]->getPathLoss())/divisor;
+	}
+	
+	totalPower=totalPower*db_to_watt(getNoisePower()-30)+db_to_watt(getPilotPower()-30);
+
+	totalPower=totalPower/(1-_usersList.size()*(getOrthoFactor()/divisor));
+
+	_totalTransmitted.push_back(totalPower);
+
+
+
+	//_totalTransmitted.push_back(Pt); 
 }
