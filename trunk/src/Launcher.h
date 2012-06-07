@@ -17,6 +17,7 @@ public:
 	Launcher(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~Launcher();
 	void generateFlow(void);
+	void updateResultLabels(User *user, bool accepted);
 
 public slots:
 	void launchSimulation(void);
@@ -33,5 +34,4 @@ private slots:
 	void callRequest(void);
 	void routine(void);
 	void updateGraphPath(void);
-	void updateResultLabels(User *user, bool accepted);
 };

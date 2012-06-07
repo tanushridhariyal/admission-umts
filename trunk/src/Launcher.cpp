@@ -175,7 +175,7 @@ void Launcher::callRequest(void)
 	}
 	_polygon << QPointF(_baseStation->getListOfUsersList().size()*10, -(_baseStation->getAverageTransmittedPower()));
 	qDebug() << _baseStation->getAverageTransmittedPower()*3;
-	QTimer::singleShot(0, this, SLOT(updateResultLabels(user, accepted)));
+	updateResultLabels(user, accepted);
 }
 
 void Launcher::routine(void)
