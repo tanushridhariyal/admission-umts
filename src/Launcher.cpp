@@ -81,7 +81,7 @@ void Launcher::generateFlow(void)
 {
 	QTime time_;
 	time_.start();
-	int MAX_NB_FRAMES_PER_IT = 100;
+	int MAX_NB_FRAMES_PER_IT = 1000;
 	while (time_.elapsed() < ui.durationTextBox->text().toInt() * 1000)
 	{	
 		for (int i = 0; i <= rand()% MAX_NB_FRAMES_PER_IT; i++)
@@ -110,19 +110,23 @@ void Launcher::updateGraphPath(void)
 	graphPath.addPolygon(_polygon);
 	
 	//Adding admission threshold line
-	//graphPath.moveTo(0, -75);
-	//graphPath.lineTo(ui.graphResults->width()-5, -75);
+	graphPath.moveTo(0, -25);
+	graphPath.lineTo(ui.graphResults->width()-5, -25);
 
 	//Painting path
 	QPainter painter(this);
-	painter.setWorldMatrixEnabled(false);
-	painter.setRenderHint(QPainter::Antialiasing, true);
-	painter.drawPath(graphPath);
+	if (painter.isActive())
+	{
+		painter.setWorldMatrixEnabled(false);
+		painter.setRenderHint(QPainter::Antialiasing, true);
+		painter.drawPath(graphPath);
+	}
 
 	_curve = new QGraphicsPathItem(graphPath);
 	_curve->setVisible(true);
 	ui.graphResults->setScene(scene);
 	ui.graphResults->scene()->addItem(_curve);	
+	qDebug() << "Nb frames : " << _baseStation->getListOfUsersList().size();
 }
 
 void Launcher::updateResultLabels(User *user, bool accepted)
