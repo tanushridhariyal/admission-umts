@@ -18,6 +18,7 @@ public:
 	~Launcher();
 	void generateFlow(void);
 	void updateResultLabels(User *user, bool accepted);
+	void updateUsersDistribution(void);
 
 public slots:
 	void launchSimulation(void);
