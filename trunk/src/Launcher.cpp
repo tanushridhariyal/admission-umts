@@ -63,13 +63,12 @@ void Launcher::launchSimulation(void)
 		User *user = new User(i, mobileHeight, _baseStation);
 		_baseStation->addUser(user);
 	}
-	_baseStation->computeTotalTransmittedPower();
 	_baseStation->addUserList(_baseStation->getUsersList());
+	_baseStation->computeTotalTransmittedPower();
 	_baseStation->computeAverageTransmittedPower();
 
 	//Updating graph. Note : y values have to be <0 to be consistent with what is expected
 	_polygon << QPointF(0, -(_baseStation->getAverageTransmittedPower()));
-	qDebug() << _baseStation->getAverageTransmittedPower()*3;
 	
 	//Randomly managing flow of user within the cell
 	generateFlow();
@@ -82,7 +81,7 @@ void Launcher::generateFlow(void)
 {
 	QTime time_;
 	time_.start();
-	int MAX_NB_FRAMES_PER_IT = 10;
+	int MAX_NB_FRAMES_PER_IT = 100;
 	while (time_.elapsed() < ui.durationTextBox->text().toInt() * 1000)
 	{	
 		for (int i = 0; i <= rand()% MAX_NB_FRAMES_PER_IT; i++)
@@ -101,7 +100,7 @@ void Launcher::generateFlow(void)
 		}
 		wait_until_next_second();
 	}
-	updateUsersDistribution();
+	QTimer::singleShot(100, this, SLOT(updateUsersDistribution()));
 }
 
 void Launcher::updateGraphPath(void)
@@ -153,7 +152,10 @@ void Launcher::updateUsersDistribution(void)
 	QGraphicsEllipseItem *circleItem = new QGraphicsEllipseItem(0, 0, 100, 100);
 	circleItem->setVisible(true);
 	ui.usersDistribution->setScene(scene);
-	ui.usersDistribution->scene()->addItem(circleItem);	
+	ui.usersDistribution->scene()->addItem(circleItem);
+
+	ui.nbUsersLabel->setText(QString::number(_baseStation->getListOfUsersList().back().size()));
+	ui.distanceLastUserLabel->setText(QString::number(_baseStation->getListOfUsersList().back().back()->getDistance()));
 }
 
 void Launcher::wait_until_next_second()
@@ -180,12 +182,11 @@ void Launcher::callRequest(void)
 	if (accepted)
 	{
 		_baseStation->addUser(user);
-		_baseStation->computeTotalTransmittedPower();
 		_baseStation->addUserList(_baseStation->getUsersList());
+		_baseStation->computeTotalTransmittedPower();	
 		_baseStation->computeAverageTransmittedPower();
 	}
-	_polygon << QPointF(_baseStation->getListOfUsersList().size()*10, -(_baseStation->getAverageTransmittedPower()));
-	qDebug() << _baseStation->getAverageTransmittedPower()*3;
+	_polygon << QPointF(_baseStation->getListOfUsersList().size(), -(_baseStation->getAverageTransmittedPower()));
 	updateResultLabels(user, accepted);
 }
 
@@ -196,10 +197,9 @@ void Launcher::routine(void)
 	int nbUsers = _baseStation->getListOfUsersList().back().size();
 	int index = rand() % nbUsers;
 	_baseStation->removeUserAt(index);
-	_baseStation->computeTotalTransmittedPower();
 	_baseStation->addUserList(_baseStation->getUsersList());
+	_baseStation->computeTotalTransmittedPower();
 	_baseStation->computeAverageTransmittedPower();
 
-	_polygon << QPointF(_baseStation->getListOfUsersList().size()*10, -(_baseStation->getAverageTransmittedPower()));
-	qDebug() << _baseStation->getAverageTransmittedPower()*3;
+	_polygon << QPointF(_baseStation->getListOfUsersList().size(), -(_baseStation->getAverageTransmittedPower()));
 }
