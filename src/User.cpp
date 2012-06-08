@@ -15,7 +15,6 @@ User::~User(void)
 
 User::User(int id, float mobileHeight, BaseStation* base)
 {
-	srand((unsigned) time(NULL));
 	_id = id;
 	_baseStation = base;
 	_mobileHeight = mobileHeight;

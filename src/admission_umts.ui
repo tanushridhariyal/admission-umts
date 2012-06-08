@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>919</width>
-    <height>613</height>
+    <width>931</width>
+    <height>639</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -654,7 +654,7 @@
         <property name="minimumSize">
          <size>
           <width>400</width>
-          <height>150</height>
+          <height>200</height>
          </size>
         </property>
         <property name="cursor" stdset="0">
@@ -728,7 +728,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>10</height>
+          <height>15</height>
          </size>
         </property>
         <property name="layoutDirection">
@@ -961,46 +961,46 @@
       <set>Qt::AlignCenter</set>
      </property>
      <layout class="QGridLayout" name="gridLayout_5">
-      <item row="2" column="1">
-       <widget class="QLabel" name="label_39">
+      <item row="9" column="1">
+       <widget class="QLabel" name="nbUsersLabel">
         <property name="text">
          <string>0</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item row="10" column="0">
        <widget class="QLabel" name="label_41">
         <property name="text">
          <string>Distance from node B for last user</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QLabel" name="label_43">
+      <item row="10" column="1">
+       <widget class="QLabel" name="distanceLastUserLabel">
         <property name="text">
          <string>0</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="9" column="0">
        <widget class="QLabel" name="label_42">
         <property name="text">
          <string>Number of users in the cell </string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="0" column="0">
        <widget class="QGraphicsView" name="usersDistribution">
         <property name="minimumSize">
          <size>
-          <width>150</width>
-          <height>150</height>
+          <width>175</width>
+          <height>175</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>150</width>
-          <height>150</height>
+          <width>175</width>
+          <height>175</height>
          </size>
         </property>
         <property name="alignment">

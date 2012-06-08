@@ -18,7 +18,7 @@ public:
 	~Launcher();
 	void generateFlow(void);
 	void updateResultLabels(User *user, bool accepted);
-	void updateUsersDistribution(void);
+	
 
 public slots:
 	void launchSimulation(void);
@@ -35,4 +35,5 @@ private slots:
 	void callRequest(void);
 	void routine(void);
 	void updateGraphPath(void);
+	void updateUsersDistribution(void);
 };

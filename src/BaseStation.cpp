@@ -35,15 +35,18 @@ BaseStation::BaseStation(float pilotPower, float bandwidth, float snrTarget, flo
 void BaseStation::computeTotalTransmittedPower(void)
 {
 	float divisor, totalPower = 0;
+	std::vector<User*> usersList = _listOfUsersList.back();
+	int nbUsers = usersList.size();
+
 	divisor = getBandwidth() /
 		(db_to_watt(getSnrTarget()) * getBitRate()) + getOrthoFactor(); // store the constant divisor factor of the formula
 	
-	for(int i = 0; i < _usersList.size(); i++)
+	for(int i = 0; i < nbUsers; i++)
 	{
-		totalPower = totalPower + db_to_watt(_usersList[i]->getPathLoss())/divisor;
+		totalPower = totalPower + db_to_watt(usersList[i]->getPathLoss())/divisor;
 	}
 	totalPower = totalPower * dbm_to_watt(getNoisePower()) + dbm_to_watt(getPilotPower());
-	totalPower = totalPower / (1-_usersList.size() * (getOrthoFactor()/divisor));
+	totalPower = totalPower / (1- nbUsers * (getOrthoFactor()/divisor));
 
 	_totalTransmittedPower.push_back(totalPower);
 }
@@ -90,11 +93,11 @@ void BaseStation::computeAverageTransmittedPower(void)
 		end_it = _totalTransmittedPower.size() - _averagingPeriod;
 		divisor = _averagingPeriod;
 	} else {
-		end_it = _totalTransmittedPower.size();
+		end_it = 0;
 		divisor = _totalTransmittedPower.size();
 	}
 
-	for (int i = _totalTransmittedPower.size(); i >= end_it; i--)
+	for (int i = _totalTransmittedPower.size(); i > end_it; i--)
 	{
 		sum += _totalTransmittedPower[i-1] ;
 	}
