@@ -101,6 +101,7 @@ void Launcher::generateFlow(void)
 		}
 		wait_until_next_second();
 	}
+	updateUsersDistribution();
 }
 
 void Launcher::updateGraphPath(void)
@@ -119,7 +120,7 @@ void Launcher::updateGraphPath(void)
 	painter.setRenderHint(QPainter::Antialiasing, true);
 	painter.drawPath(graphPath);
 
-	QGraphicsPathItem *_curve = new QGraphicsPathItem(graphPath);
+	_curve = new QGraphicsPathItem(graphPath);
 	_curve->setVisible(true);
 	ui.graphResults->setScene(scene);
 	ui.graphResults->scene()->addItem(_curve);	
@@ -143,6 +144,16 @@ void Launcher::updateResultLabels(User *user, bool accepted)
 		ui.lastBoolResultLabel->setPalette(plt);
 		ui.lastBoolResultLabel->setText("Last request rejected");
 	}
+}
+
+void Launcher::updateUsersDistribution(void)
+{
+	QGraphicsScene *scene = new QGraphicsScene();
+
+	QGraphicsEllipseItem *circleItem = new QGraphicsEllipseItem(0, 0, 100, 100);
+	circleItem->setVisible(true);
+	ui.usersDistribution->setScene(scene);
+	ui.usersDistribution->scene()->addItem(circleItem);	
 }
 
 void Launcher::wait_until_next_second()
