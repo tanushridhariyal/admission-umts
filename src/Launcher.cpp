@@ -186,7 +186,6 @@ void Launcher::updateUsersDistribution(void)
 				
 		float angle = ((float) (rand()%90 + 1)) *3.14159265/180; //angle needs to be expressed in radians
 		float Y = coeff_y * (userDistance * center_pos)* cos(angle);
-		//Thanks to Al-Kashi theorem we have c² = a² + b² - 2ab*cos(C):
 		float X = coeff_x * (sqrt(pow((userDistance * center_pos), 2) - pow(Y, 2)));
 
 		float scaled_Y = center_pos + Y;
