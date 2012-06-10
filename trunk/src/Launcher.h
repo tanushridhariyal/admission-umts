@@ -27,8 +27,6 @@ public slots:
 private:
 	Ui::admission_umtsClass ui;
 	BaseStation *_baseStation;
-	QGraphicsPathItem *_curve;
-	QPainterPath graphPath;
 	QPolygonF _polygon;
 
 private slots:

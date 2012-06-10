@@ -16,6 +16,8 @@ Launcher::Launcher(QWidget *parent, Qt::WFlags flags)
 	ui.setupUi(this);
 	_polygon << QPointF(0, 0);
 
+	this->setAttribute(Qt::WA_PaintOutsidePaintEvent, true);
+
 	//Connecting slots
 	QObject::connect(ui.launchSimulationButton, SIGNAL(clicked()), this, SLOT(launchSimulation()));
 }
@@ -69,7 +71,7 @@ void Launcher::launchSimulation(void)
 	_baseStation->computeAverageTransmittedPower();
 
 	//Updating graph. Note : y values have to be <0 to be consistent with what is expected
-	_polygon << QPointF(0, -(_baseStation->getAverageTransmittedPower()));
+	_polygon << QPointF(0, -(_baseStation->getAverageTransmittedPower() *3));
 	
 	//Randomly managing flow of user within the cell
 	generateFlow();
@@ -106,27 +108,20 @@ void Launcher::generateFlow(void)
 
 void Launcher::updateGraphPath(void)
 {
+	float threshold_lvl = ui.thresholdPowerTextBox->text().toFloat(); 
 	QGraphicsScene *scene = new QGraphicsScene();
-	graphPath = QPainterPath();
+	QPainterPath graphPath = QPainterPath();
 	graphPath.addPolygon(_polygon);
 	
-	//Adding admission threshold line
-	graphPath.moveTo(0, -25);
-	graphPath.lineTo(ui.graphResults->width()-5, -25);
+	QLineF line_thr(QPointF(0, -threshold_lvl *3), QPointF(ui.graphResults->width()-5, -threshold_lvl *3));
+	QGraphicsLineItem *line_thrItem = new QGraphicsLineItem(line_thr);
+	line_thrItem->setPen(QPen(Qt::red, 1));
 
-	//Painting path
-	QPainter painter(this);
-	if (painter.isActive())
-	{
-		painter.setWorldMatrixEnabled(false);
-		painter.setRenderHint(QPainter::Antialiasing, true);
-		painter.drawPath(graphPath);
-	}
-	_curve = new QGraphicsPathItem(graphPath);
-	_curve->setVisible(true);
+	QGraphicsPathItem *_curve = new QGraphicsPathItem(graphPath);
 	ui.graphResults->setScene(scene);
-	ui.graphResults->scene()->addItem(_curve);	
-	qDebug() << "Nb frames : " << _baseStation->getListOfUsersList().size();
+	ui.graphResults->setRenderHint(QPainter::Antialiasing, true);
+	ui.graphResults->scene()->addItem(_curve);
+	ui.graphResults->scene()->addItem(line_thrItem);
 }
 
 void Launcher::updateResultLabels(User *user, bool accepted)
@@ -192,7 +187,7 @@ void Launcher::updateUsersDistribution(void)
 		float scaled_X = center_pos + X;
 		ui.usersDistribution->scene()->addEllipse(scaled_X, scaled_Y, 3, 3, QPen(Qt::black, 3));
 	}
-
+	ui.usersDistribution->setRenderHint(QPainter::Antialiasing, true);
 	ui.nbUsersLabel->setText(QString::number(nbUsers));
 	ui.distanceLastUserLabel->setText(QString::number(_baseStation->getListOfUsersList().back().back()->getDistance()));
 }
@@ -225,7 +220,7 @@ void Launcher::callRequest(void)
 		_baseStation->computeTotalTransmittedPower();	
 		_baseStation->computeAverageTransmittedPower();
 	}
-	_polygon << QPointF(_baseStation->getListOfUsersList().size(), -(_baseStation->getAverageTransmittedPower()));
+	_polygon << QPointF(_baseStation->getListOfUsersList().size(), -(_baseStation->getAverageTransmittedPower() *3));
 	updateResultLabels(user, accepted);
 }
 
@@ -240,5 +235,5 @@ void Launcher::routine(void)
 	_baseStation->computeTotalTransmittedPower();
 	_baseStation->computeAverageTransmittedPower();
 
-	_polygon << QPointF(_baseStation->getListOfUsersList().size(), -(_baseStation->getAverageTransmittedPower()));
+	_polygon << QPointF(_baseStation->getListOfUsersList().size(), -(_baseStation->getAverageTransmittedPower()  *3));
 }
