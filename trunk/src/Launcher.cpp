@@ -1,4 +1,5 @@
 #include <time.h>
+#include <math.h>
 
 #include <QDebug>
 #include <QString>
@@ -121,7 +122,6 @@ void Launcher::updateGraphPath(void)
 		painter.setRenderHint(QPainter::Antialiasing, true);
 		painter.drawPath(graphPath);
 	}
-
 	_curve = new QGraphicsPathItem(graphPath);
 	_curve->setVisible(true);
 	ui.graphResults->setScene(scene);
@@ -153,12 +153,48 @@ void Launcher::updateUsersDistribution(void)
 {
 	QGraphicsScene *scene = new QGraphicsScene();
 
-	QGraphicsEllipseItem *circleItem = new QGraphicsEllipseItem(0, 0, 100, 100);
+	QGraphicsEllipseItem *circleItem = new QGraphicsEllipseItem(0, 0, 150, 150);
 	circleItem->setVisible(true);
 	ui.usersDistribution->setScene(scene);
 	ui.usersDistribution->scene()->addItem(circleItem);
 
-	ui.nbUsersLabel->setText(QString::number(_baseStation->getListOfUsersList().back().size()));
+	int center_pos = 75;
+	//Setting base station pixel
+	QColor c_base("red");
+	QImage *image = new QImage(5, 5, QImage::Format_Indexed8);
+	image->setColor(0, c_base.rgb());
+	QPixmap imagePixmap_base(QPixmap::fromImage(*image,Qt::AutoColor));
+    QGraphicsPixmapItem* item_base = new QGraphicsPixmapItem(imagePixmap_base);
+	item_base->setPos(center_pos, center_pos);
+	ui.usersDistribution->scene()->addItem(item_base);
+
+	int nbUsers = _baseStation->getListOfUsersList().back().size();
+
+	//Setting users pixel
+	for (int i = 0; i < nbUsers; i++)
+	{
+		int rd;
+		float userDistance = _baseStation->getListOfUsersList().back().at(i)->getDistance();
+		int coeff_x = 1;
+		int coeff_y = 1;
+		rd = rand()%2;
+		if (rd == 1)
+			coeff_x = - 1;
+		rd = rand()%2;
+		if (rd == 1)
+			coeff_y = -1;
+				
+		float angle = ((float) (rand()%90 + 1)) *3.14159265/180; //angle needs to be expressed in radians
+		float Y = coeff_y * (userDistance * center_pos)* cos(angle);
+		//Thanks to Al-Kashi theorem we have c² = a² + b² - 2ab*cos(C):
+		float X = coeff_x * (sqrt(pow((userDistance * center_pos), 2) - pow(Y, 2)));
+
+		float scaled_Y = center_pos + Y;
+		float scaled_X = center_pos + X;
+		ui.usersDistribution->scene()->addEllipse(scaled_X, scaled_Y, 3, 3, QPen(Qt::black, 3));
+	}
+
+	ui.nbUsersLabel->setText(QString::number(nbUsers));
 	ui.distanceLastUserLabel->setText(QString::number(_baseStation->getListOfUsersList().back().back()->getDistance()));
 }
 
