@@ -16,6 +16,7 @@ public:
 	float computeIncreaseEstimation (User *user);
 	void computeAverageTransmittedPower(void);
 	bool isAdmissible(User *user);
+	void computeDevotedPowerAllUsers(void);
 
 	//Convertors
 	static float watt_to_db(float);

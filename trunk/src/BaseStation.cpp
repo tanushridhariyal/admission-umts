@@ -31,7 +31,10 @@ BaseStation::BaseStation(float pilotPower, float bandwidth, float snrTarget, flo
 	_averagingPeriod = averagingPeriod;
 }
 
-//Computation methods
+/*
+ * Computes the total transmitted power for the last frame
+ * 
+ */
 void BaseStation::computeTotalTransmittedPower(void)
 {
 	float divisor, totalPower = 0;
@@ -51,59 +54,74 @@ void BaseStation::computeTotalTransmittedPower(void)
 	_totalTransmittedPower.push_back(totalPower);
 }
 
+/*
+ * Computes the increase estimation of the user's request
+ * 
+ */
 float BaseStation::computeIncreaseEstimation (User *user)
 {
-	float sum = 0;
-	//for the (i -j) frames
-	int end_it, divisor, nbUsers;
-	
-	if (_listOfUsersList.size() > _averagingPeriod)
-	{
-		end_it = _listOfUsersList.size() - _averagingPeriod;
-		divisor = _averagingPeriod;
-	} else {
-		end_it = 0;
-		divisor = _listOfUsersList.size();
-	}
+	//float sum = 0;
+	////for the (i -j) frames
+	//int end_it, divisor, nbUsers;
+	//
+	//if (_listOfUsersList.size() > _averagingPeriod)
+	//{
+	//	end_it = _listOfUsersList.size() - _averagingPeriod;
+	//	divisor = _averagingPeriod;
+	//} else {
+	//	end_it = 0;
+	//	divisor = _listOfUsersList.size();
+	//}
 
-	std::vector<User*> usersList;
-	
-	for (int i = _listOfUsersList.size(); i > end_it; i--)
-	{
-		nbUsers = _listOfUsersList[i-1].size();
-		//for each connected user
-		for (int j = 0; j < nbUsers; j++)
-		{
-		usersList = _listOfUsersList[i-1];
-		sum += dbm_to_watt(usersList[j]->getDevotedPower());
-		}
-		sum = sum / nbUsers;
-	}
-	return watt_to_dbm(sum / divisor);
+	//std::vector<User*> usersList;
+	//
+	//for (int i = _listOfUsersList.size(); i > end_it; i--)
+	//{
+	//	nbUsers = _listOfUsersList[i-1].size();
+	//	//for each connected user
+	//	for (int j = 0; j < nbUsers; j++)
+	//	{
+	//	usersList = _listOfUsersList[i-1];
+	//	usersList[j]->computeDevotedPower();
+	//	sum += dbm_to_watt(usersList[j]->getDevotedPower());
+	//	}
+	//	sum = sum / nbUsers;
+	//}
+	//return watt_to_dbm(sum / divisor);
+	return user->getDevotedPower();
 }
 
+/*
+ * Computes the average transmitted power for the last (i-j) frames
+ * CHECK
+ */
 void BaseStation::computeAverageTransmittedPower(void) 
 {
-	float sum = 0;
-	//for the (i-j) frames
-	int end_it;
-	float divisor;
-	if (_totalTransmittedPower.size() > _averagingPeriod)
-	{
-		end_it = _totalTransmittedPower.size() - _averagingPeriod;
-		divisor = _averagingPeriod;
-	} else {
-		end_it = 0;
-		divisor = _totalTransmittedPower.size();
-	}
+	//float sum = 0;
+	////for the (i-j) frames
+	//int end_it;
+	//float divisor;
+	//if (_totalTransmittedPower.size() > _averagingPeriod)
+	//{
+	//	end_it = _totalTransmittedPower.size() - _averagingPeriod;
+	//	divisor = _averagingPeriod;
+	//} else {
+	//	end_it = 0;
+	//	divisor = _totalTransmittedPower.size();
+	//}
 
-	for (int i = _totalTransmittedPower.size(); i > end_it; i--)
-	{
-		sum += _totalTransmittedPower[i-1] ;
-	}
-	_averageTransmittedPower = watt_to_dbm(sum / divisor);
+	//for (int i = _totalTransmittedPower.size(); i > end_it; i--)
+	//{
+	//	sum += _totalTransmittedPower[i-1] ;
+	//}
+	//_averageTransmittedPower = watt_to_dbm(sum / divisor);
+	_averageTransmittedPower = watt_to_dbm(_totalTransmittedPower.back());
 }
 
+/*
+ * Returns true if the user's call request can be accepted by the base station
+ * CHECK
+ */
 bool BaseStation::isAdmissible(User *user)
 {
 	computeAverageTransmittedPower();
@@ -111,6 +129,12 @@ bool BaseStation::isAdmissible(User *user)
 		return true;
 	else
 		return false;
+}
+
+void BaseStation::computeDevotedPowerAllUsers(void)
+{
+	for (int i = 0; i < _usersList.size(); i++)
+		_usersList[i]->computeDevotedPower();
 }
 
 //Convertors

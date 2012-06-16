@@ -16,8 +16,6 @@ Launcher::Launcher(QWidget *parent, Qt::WFlags flags)
 	ui.setupUi(this);
 	_polygon << QPointF(0, 0);
 
-	this->setAttribute(Qt::WA_PaintOutsidePaintEvent, true);
-
 	//Connecting slots
 	QObject::connect(ui.launchSimulationButton, SIGNAL(clicked()), this, SLOT(launchSimulation()));
 }
@@ -68,10 +66,8 @@ void Launcher::launchSimulation(void)
 	}
 	_baseStation->addUserList(_baseStation->getUsersList());
 	_baseStation->computeTotalTransmittedPower();
+	//_baseStation->computeDevotedPowerAllUsers();
 	_baseStation->computeAverageTransmittedPower();
-
-	//Updating graph. Note : y values have to be <0 to be consistent with what is expected
-	_polygon << QPointF(0, -(_baseStation->getAverageTransmittedPower() *3));
 	
 	//Randomly managing flow of user within the cell
 	generateFlow();
@@ -202,7 +198,7 @@ void Launcher::wait_until_next_second()
 
 void Launcher::callRequest(void)
 {	
-	qDebug() << "Running call request";
+	//qDebug() << "Running call request";
 
 	float mobileHeight;
 	if (ui.urbanRadioButton->isChecked())
@@ -217,23 +213,28 @@ void Launcher::callRequest(void)
 	{
 		_baseStation->addUser(user);
 		_baseStation->addUserList(_baseStation->getUsersList());
-		_baseStation->computeTotalTransmittedPower();	
+		_baseStation->computeTotalTransmittedPower();
+		//_baseStation->computeDevotedPowerAllUsers();
 		_baseStation->computeAverageTransmittedPower();
 	}
-	_polygon << QPointF(_baseStation->getListOfUsersList().size(), -(_baseStation->getAverageTransmittedPower() *3));
+	_polygon << QPointF(_baseStation->getListOfUsersList().size(), -(_baseStation->getAverageTransmittedPower() *3 + _baseStation->computeIncreaseEstimation(user)*3));
 	updateResultLabels(user, accepted);
 }
 
 void Launcher::routine(void)
 {
-	qDebug() << "Running routine";
+	//qDebug() << "Running routine";
 
 	int nbUsers = _baseStation->getListOfUsersList().back().size();
-	int index = rand() % nbUsers;
-	_baseStation->removeUserAt(index);
-	_baseStation->addUserList(_baseStation->getUsersList());
-	_baseStation->computeTotalTransmittedPower();
-	_baseStation->computeAverageTransmittedPower();
+	int index = 0;
+	if (nbUsers != 0) {
+		index = rand() % nbUsers;
+		_baseStation->removeUserAt(index);
+		_baseStation->addUserList(_baseStation->getUsersList());
+		_baseStation->computeTotalTransmittedPower();
+		//_baseStation->computeDevotedPowerAllUsers();
+		_baseStation->computeAverageTransmittedPower();
+	}
 
-	_polygon << QPointF(_baseStation->getListOfUsersList().size(), -(_baseStation->getAverageTransmittedPower()  *3));
+	//_polygon << QPointF(_baseStation->getListOfUsersList().size(), -(_baseStation->getAverageTransmittedPower()  *3));
 }
