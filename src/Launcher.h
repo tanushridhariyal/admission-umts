@@ -16,9 +16,7 @@ class Launcher : public QWidget
 public:
 	Launcher(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~Launcher();
-	void generateFlow(void);
-	void updateResultLabels(User *user, bool accepted);
-	
+	void generateFlow(void);	
 
 public slots:
 	void launchSimulation(void);
@@ -34,4 +32,5 @@ private slots:
 	void routine(void);
 	void updateGraphPath(void);
 	void updateUsersDistribution(void);
+	void updateResultLabels(User *user, bool accepted);
 };

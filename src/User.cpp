@@ -60,6 +60,10 @@ void User::setBaseStation(BaseStation *baseStation)
 	_baseStation = baseStation;
 }
 
+/*
+ * Computes the path loss of the user in dB
+ * CHECK
+ */
 void User::computePathLoss(void)
 {
 	float F,B,E;
@@ -71,14 +75,22 @@ void User::computePathLoss(void)
 	_pathLoss= F + B*log10(_distance)-E + _baseStation->getGain();
 }
 
+/*
+ * Computes the devoted power to i-th user in dBm
+ * CHECK
+ */
 void User::computeDevotedPower(void)
 {
+	float totalTransmittedPower = 0;
+	if (_baseStation->getTotalTransmittedPower().size() > 0)
+		totalTransmittedPower = _baseStation->getTotalTransmittedPower().back();
+
 	float value = 
 		BaseStation::db_to_watt(_pathLoss) * 
 		(
 			(
 				BaseStation::dbm_to_watt(_baseStation->getNoisePower()) + _baseStation->getOrthoFactor() *
-				(BaseStation::dbm_to_watt(32/*_baseStation->getTotalTransmittedPower().back()*/) / BaseStation::db_to_watt(_pathLoss))
+				(BaseStation::dbm_to_watt(totalTransmittedPower) / BaseStation::db_to_watt(_pathLoss))
 			) 
 			/
 			(
