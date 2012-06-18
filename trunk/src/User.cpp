@@ -13,12 +13,12 @@ User::~User(void)
 {
 }
 
-User::User(int id, float mobileHeight, BaseStation* base)
+User::User(int id, float mobileHeight, float cellRadius, BaseStation* base)
 {
 	_id = id;
 	_baseStation = base;
 	_mobileHeight = mobileHeight;
-	_distance = ((float) (rand()%100 + 1)) / 100;
+	_distance = ((float) cellRadius * (rand()%(100-10) +10)) / 100;
 
 	computePathLoss();
 	computeDevotedPower();

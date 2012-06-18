@@ -14,7 +14,6 @@ Launcher::Launcher(QWidget *parent, Qt::WFlags flags)
 {
 	srand((unsigned) time(NULL));
 	ui.setupUi(this);
-	_polygon << QPointF(0, 0);
 
 	//Connecting slots
 	QObject::connect(ui.launchSimulationButton, SIGNAL(clicked()), this, SLOT(launchSimulation()));
@@ -29,6 +28,11 @@ void Launcher::launchSimulation(void)
 	qDebug() << "Launch Simulation button clicked";
 	ui.resultLabel->setText(QString("Simulation in progress...\nPlease wait."));
 	qDebug() << "Simulation in progress";
+
+	nbRejected = 0;
+	nbTotal = 0;
+	_polygon = QPolygonF();
+	_polygon << QPointF(0, 0);
 
 	int initNbUsers = ui.initNbUsersTextBox->text().toInt();
 	float baseStationHeight, mobileHeight, gain, frequency;
@@ -61,7 +65,7 @@ void Launcher::launchSimulation(void)
 	//Simulating existing users
 	for (int i = 0; i < initNbUsers; i++)
 	{
-		User *user = new User(i, mobileHeight, _baseStation);
+		User *user = new User(i, mobileHeight, ui.cellRadiusTextBox->text().toFloat(), _baseStation);
 		_baseStation->addUser(user);
 	}
 	_baseStation->addUserList(_baseStation->getUsersList());
@@ -126,6 +130,8 @@ void Launcher::updateResultLabels(User *user, bool accepted)
 	ui.lastDevotedPowerLabel->setText(QString::number(user->getDevotedPower(), 'f'));
 	ui.lastAveragePowerLabel->setText(QString::number(_baseStation->getAverageTransmittedPower(), 'f'));
 	ui.lastPowerIncreaseLabel->setText(QString::number(_baseStation->computeIncreaseEstimation(user), 'f'));
+	ui.nbRejectedLabel->setText(QString::number(nbRejected));
+	ui.admissionRateLabel->setText(QString::number((nbTotal - nbRejected) *100 / nbTotal) + '%');
 
 	QPalette plt;
 	if (accepted)
@@ -165,7 +171,7 @@ void Launcher::updateUsersDistribution(void)
 	for (int i = 0; i < nbUsers; i++)
 	{
 		int rd;
-		float userDistance = _baseStation->getListOfUsersList().back().at(i)->getDistance();
+		float userDistance = _baseStation->getListOfUsersList().back().at(i)->getDistance() / ui.cellRadiusTextBox->text().toFloat();
 		int coeff_x = 1;
 		int coeff_y = 1;
 		rd = rand()%2;
@@ -207,7 +213,7 @@ void Launcher::callRequest(void)
 		mobileHeight = ui.sub_MobileHeightTextBox->text().toFloat();
 	
 	int idUser = _baseStation->getListOfUsersList().back().size() + _baseStation->getListOfUsersList().size();
-	User *user = new User(idUser, mobileHeight, _baseStation);
+	User *user = new User(idUser, mobileHeight, ui.cellRadiusTextBox->text().toFloat(), _baseStation);
 	bool accepted = _baseStation->isAdmissible(user);
 	if (accepted)
 	{
@@ -216,8 +222,11 @@ void Launcher::callRequest(void)
 		_baseStation->computeTotalTransmittedPower();
 		//_baseStation->computeDevotedPowerAllUsers();
 		_baseStation->computeAverageTransmittedPower();
+	} else {
+		nbRejected++;
 	}
 	_polygon << QPointF(_baseStation->getListOfUsersList().size(), -(_baseStation->getAverageTransmittedPower() *3 + _baseStation->computeIncreaseEstimation(user)*3));
+	nbTotal++;
 	updateResultLabels(user, accepted);
 }
 

@@ -8,7 +8,7 @@ class User
 public:
 	User(void);
 	~User(void);
-	User(int id, float mobileHeight, BaseStation*);
+	User(int id, float mobileHeight, float cellRadius, BaseStation*);
 	void computePathLoss(void);
 	void computeDevotedPower(void);
 
