@@ -26,6 +26,8 @@ private:
 	Ui::admission_umtsClass ui;
 	BaseStation *_baseStation;
 	QPolygonF _polygon;
+	int nbRejected;
+	int nbTotal;
 
 private slots:
 	void callRequest(void);
