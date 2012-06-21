@@ -1,14 +1,36 @@
-Copyright (C) <2012>  <Quentin Grosperrin, Brice Masson>
+RE56 : Mobile networks
+Admission control in UTMS Networks
+By Masson Brice and Grosperrin Quentin
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+Spring 2012, UTBM
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+/* ------------------------------------------------- */
+                 Source files architecture :
+/* ------------------------------------------------- */
 
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>
+admission_umts.qrc 
+=> Qt file 
+admission_umts.ui
+=> Qt file containing all the information to draw the GUI
+BaseStation.h - BaseStation.cpp
+=> Class used to simulate a base station. It contains all the base station parameters as attributes, 
+and a list of users which are in the cell
+User.h - User.cpp
+=> Class used to simulate a user. A user is associated to a base station.
+Launcher.h - Launcher.cpp
+=> Class used to implement the application behavior and initialize the GUI and the simulation.
+main.cpp
+=> The main file used to launch an instance of Launcher to create the GUI.
+
+/* ------------------------------------------------- */
+                How to install/run the program :
+/* ------------------------------------------------- */
+
+No installation is needed, just execute the 'admission-umts.exe' on a Windows machine.
+Once is done, all the parameters for the simulation are preset, just hit 'Launch simulation'.
+
+/* ------------------------------------------------- */
+                Where are the results :
+/* ------------------------------------------------- */
+
+All the results are directly displayed on-screen.
